@@ -10,7 +10,7 @@ To access and execute the code, please clone this repository to your local machi
 
 ##### Dependencies
 
-We recommend executing the code in the provided virtual environment `environment.yml` using [conda](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) (to install Anaconda: see [here](https://www.anaconda.com/)). To create the environement, use:
+We recommend executing the code in the provided virtual environment **environment.yml** using [conda](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) (to install Anaconda: see [here](https://www.anaconda.com/)). To create the environement, use:
 
 `conda env create -f environment.yml`
 
@@ -29,13 +29,13 @@ We tested the code using the following dependencies:
 - tensorflow 2.1.0
 
 ##### Data
-Please download the **data folder** (3.4 GB) from the Menedley Dataset available at DOI: 10.17632/z8bh7n5b7d.1. Copy the data folder next to the root directory of the repository:
+Please download the **data folder** (3.4 GB) from the Menedley Dataset available at DOI: 10.17632/z8bh7n5b7d.1. Copy the data folder to the root directory of the repository:
 
-| drm_ml_demo
-    | **data**
-    | lib
-    | trained models
-    | tests
+> drm_ml_demo
+--> **data**
+--> lib
+--> trained models
+--> tests
 
 ### Description
 
