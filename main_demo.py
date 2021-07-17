@@ -34,10 +34,10 @@ def define_model(checkpoint_path, train_samples, test_samples):
                         )
 
     model.create_model(
-        kernelNeurons1=64,
-        kernelNeurons2=64,
-        denseNeurons1=256,
-        denseNeurons2=128,
+        kernel_neurons_1=64,
+        kenerl_neurons_2=64,
+        dense_neurons_1=256,
+        dense_neurons_2=128,
     )
 
     return model
@@ -105,11 +105,11 @@ def run_test():
 
             ds = 1  # Downscaling factor (1 = native resolution)
 
-            data = np.load(os.path.join(model.ROOT, 'drm_data.npy'))[::ds, ::ds]
+            data = np.load(os.path.join(model.root, 'drm_data.npy'))[::ds, ::ds]
             rx, ry, s0, s1 = data.shape
             data = data.reshape((rx * ry, s0, s1))
             dataset = tf.data.Dataset.from_tensor_slices(data).batch(50)
-            eulers = np.load(os.path.join(model.ROOT, 'eulers.npy'))[::ds, ::ds]
+            eulers = np.load(os.path.join(model.root, 'eulers.npy'))[::ds, ::ds]
             eulers = eulers.reshape((rx * ry, 3))
 
             # Get model prediction
