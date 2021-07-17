@@ -6,7 +6,7 @@ This repository contains the Python code necessary to reproduce the results pres
 
 ##### Code
 
-Please clone this repository to your local machine.
+To access and execute the code, please clone this repository to your local machine.
 
 ##### Dependencies
 
@@ -29,7 +29,7 @@ We tested the code using the following dependencies:
 - tensorflow 2.1.0
 
 ##### Data
-Please download the **data folder** (3.4 Gb) from [here](DOI: 10.17632/z8bh7n5b7d.1) (will open a Mendeley Dataset) and copy it next to the root directory of the repository:
+Please download the **data folder** (3.4 GB) from the Menedley Dataset available at DOI: 10.17632/z8bh7n5b7d.1. Copy the data folder next to the root directory of the repository:
 
 | drm_ml_demo
     | **data**
