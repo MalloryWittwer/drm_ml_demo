@@ -29,13 +29,7 @@ We tested the code using the following dependencies:
 - tensorflow 2.1.0
 
 ##### Data
-Please download the **data folder** (3.4 GB) from the Menedley Dataset available at DOI: 10.17632/z8bh7n5b7d.1. Copy the data folder to the root directory of the repository:
-
-> drm_ml_demo
---> **data**
---> lib
---> trained models
---> tests
+Please download the **data folder** (3.4 GB) from the Menedley Dataset available at DOI: 10.17632/z8bh7n5b7d.1. Copy the data folder to the root directory of the repository (same level as the lib and trained_models folders).
 
 ### Description
 
