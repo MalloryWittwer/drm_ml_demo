@@ -1,0 +1,6 @@
+
+*.pyc
+*.pyc
+*.xml
+lib/ml_helpers/__pycache__/evaluation.cpython-36.pyc
+*.npy
