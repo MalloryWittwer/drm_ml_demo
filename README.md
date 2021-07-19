@@ -29,7 +29,7 @@ We tested the code using the following dependencies:
 - tensorflow 2.1.0
 
 ##### Data
-Please download the **data folder** (3.4 GB) from the Menedley Dataset available at DOI: 10.17632/z8bh7n5b7d.1. Copy the data folder to the root directory of the repository (same level as the lib and trained_models folders).
+Please download the **data** folder (3.4 GB) and **trained_models** folder (139 Mb) from the Menedley Dataset available at ~~DOI:10.17632/z8bh7n5b7d.1~~ [this preview](https://data.mendeley.com/datasets/z8bh7n5b7d/draft?a=df1ad0ba-6c55-477b-be3d-8e436b957846). Copy the two folders into the root directory of the repository.
 
 ### Description
 
@@ -40,15 +40,15 @@ The **data** folder contains (i) all training and evaluation sets used to derive
 
 The **lib** folder contains the Python code to process the data and implement and test our machine learning models to reproduce our results.
 
-The **trained_models** folder contains 10 EulerNet models trained independently on the different cross-validation splits.
+The **trained_models** folder contains ten EulerNet models trained independently on the different cross-validation splits.
 
 ### Steps to reproduce our results
 
-The repository root contains three test files:
+Three test files are provided:
 
 - Execute **main_demo.py** to reproduce the machine learning prediction and evaluate performance. Typical runtime is about 5-10 min.
 - Execute **anomaly_detection.py** to reproduce our anomaly detection results. Typical runtime is < 1 min.
-- Execute **data_extraction.py** for a demonstration of the process used to select data for training and test sets. Typical runtime is about 3-5 min.
+- Execute **data_extraction.py** for a demonstration of the basic process used to select data for training and test sets. Typical runtime is about 3-5 min.
 
 ### Inquiries
 For any inquiry, please contact the corresponding author.
