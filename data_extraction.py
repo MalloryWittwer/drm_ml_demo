@@ -10,21 +10,24 @@ import numpy as np
 from scipy import ndimage
 from skimage.feature import peak_local_max
 from lib.segmentation import run_lrc_mrm
+import warnings
+warnings.filterwarnings("ignore")
 
 
-def run_test(ms=8, cps=20, ssize=5_000, debug=False, save_it=True):
+def run_test(ms=8, cps=20, ssize=5_000, debug=False, save_it=False):
     """
     Runs the data extraction test.
 
     Args:
         ms: Exclusion distance to closest grain boundary (in px).
-        cps: Size of the NMF basis (pseudo-parameter of the LRC-MRM algorithm)
-        ssize: Random sampling size (pseudo-parameter of LRC-MRM)
-        debug: stops the process after 1 window
-        save_it: whether to save the extracted dataset or not
+        cps: Size of the NMF basis (pseudo-parameter of the grain segmentation algorithm).
+        ssize: Random sampling size (pseudo-parameter of the grain segmentation algorithm).
+        debug: if True, stops the process after 1 window instead of processing the whole dataset.
+        save_it: whether to save the extracted dataset or not. If True, creates a NPY file (extracted_set_test.npy)
+        containing a dataset of (1) DRM signals extracted from the specimen and (2) the corresponding EBSD orientations.
     """
     # Specify root directory
-    root = os.path.dirname(os.path.realpath(__file__))
+    root = os.path.realpath(__file__)
     root = os.path.abspath(os.path.join(os.path.dirname(root), 'data/'))
 
     # Open DRM dataset
@@ -105,13 +108,10 @@ def run_test(ms=8, cps=20, ssize=5_000, debug=False, save_it=True):
     if save_it:
         np.save(f'{root}/extracted_set_test.npy', {'xtr': xtr, 'ytr': ytr})
 
+    print('Extracted DRM data: ', xtr.shape)
+    print('Extracted Euler angles: ', ytr.shape)
+    print('Saving: ', save_it)
+    print('Debug mode: ', debug)
 
 if __name__ == '__main__':
-    """
-    Expected result: Creation of NPY file (extracted_set_test.npy) in the root
-    directory. The file contains a dataset of (1) DRM signals extracted from
-    the provided specimen and (2) the corresponding EBSD crystal orientations.
-    This strategy was applied to 10 different specimens before training the 
-    CNN models shown in the paper.
-    """
-    run_test(debug=True, save_it=True)
+    run_test(debug=True, save_it=False)

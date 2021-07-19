@@ -17,7 +17,6 @@ def run_lrc_mrm(dataset_slice, cps, sample_size):
         dataset_slice,
         model=LogisticRegression(penalty='none'),
         training_set_size=sample_size,
-        test_set_size=sample_size,
     )
     dataset_slice = _lrc_mrm_segmentation(dataset_slice)
     return dataset_slice
