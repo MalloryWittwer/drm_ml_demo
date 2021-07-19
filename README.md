@@ -46,9 +46,9 @@ The **trained_models** folder contains 10 EulerNet models trained independently 
 
 The repository root contains three test files:
 
-- Execute **main_demo.py** to reproduce the machine learning prediction and evaluate performance.
-- Execute **anomaly_detection.py** to reproduce our anomaly detection results.
-- Execute **data_extraction.py** for a demonstration of the process used to select data for training and test sets.
+- Execute **main_demo.py** to reproduce the machine learning prediction and evaluate performance. Typical runtime is about 5-10 min.
+- Execute **anomaly_detection.py** to reproduce our anomaly detection results. Typical runtime is < 1 min.
+- Execute **data_extraction.py** for a demonstration of the process used to select data for training and test sets. Typical runtime is about 3-5 min.
 
 ### Inquiries
 For any inquiry, please contact the corresponding author.
