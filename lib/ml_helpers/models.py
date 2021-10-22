@@ -4,7 +4,7 @@ import tensorflow as tf
 import tensorflow.keras.backend as K
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-from lib.ml_helpers import evaluate_and_disptlot, custom_loss, moa
+from lib.ml_helpers import custom_loss, moa
 from lib.utils import array_trimmer
 
 
@@ -99,7 +99,7 @@ class CustomModel:
         # Get training dataset
         self.training_dico, self.xtr, self.ytr = self.get_dataset(
             train_samples, subset='training_sets')
-
+        
         # Keep a fraction of the data as validation set
         self.xtr, self.xval, self.ytr, self.yval = train_test_split(
             self.xtr, self.ytr, test_size=test_size)
@@ -172,7 +172,8 @@ class CustomModel:
             lambda x: preprocess(x), output_shape=(self.s0, self.s1, 2))(inputs)
 
         # Define the output
-        output = self.euler_net(lambds)
+        output = self.euler_net(lambds)  # EulerNet
+        # output = self.reference_model(lambds)  # Jha et al.
 
         # Build the model
         self.model = tf.keras.Model(inputs=inputs, outputs=output)
@@ -187,7 +188,7 @@ class CustomModel:
             loss=custom_loss,
             metrics=[moa],
         )
-
+        
     def euler_net(self, lambds):
         """
         Core EulerNet architecture.
@@ -208,6 +209,42 @@ class CustomModel:
         output = tf.keras.layers.Dense(3, activation=None)(dense01)
 
         return output
+
+    # def reference_model(self, lambds):
+    #     """
+    #     Deeper model architecture - Does not lead to any improvement.
+    #     """
+    #     init = tf.keras.initializers.VarianceScaling(0.5)
+
+    #     conv2d00 = tf.keras.layers.Conv2D(256, (3, 3), strides=(1, 1), padding="same",
+    #                                      activation='relu')(lambds)
+    #     conv2d01 = tf.keras.layers.Conv2D(256, (3, 3), strides=(1, 1), padding="same",
+    #                                      activation='relu')(conv2d00)
+    #     conv2d02 = tf.keras.layers.Conv2D(512, (3, 3), strides=(1, 1), padding="same",
+    #                                      activation='relu')(conv2d01)
+    #     conv2d03 = tf.keras.layers.Conv2D(512, (3, 3), strides=(1, 1), padding="same",
+    #                                      activation='relu')(conv2d02)
+        
+    #     mpool1 = tf.keras.layers.MaxPooling2D((2, 2))(conv2d03)
+        
+    #     conv2d10 = tf.keras.layers.Conv2D(256, (3, 3), strides=(1, 1), padding="same",
+    #                                      activation='relu')(mpool1)
+    #     conv2d11 = tf.keras.layers.Conv2D(256, (3, 3), strides=(1, 1), padding="same",
+    #                                      activation='relu')(conv2d10)
+    #     conv2d12 = tf.keras.layers.Conv2D(512, (3, 3), strides=(1, 1), padding="same",
+    #                                      activation='relu')(conv2d11)
+    #     conv2d13 = tf.keras.layers.Conv2D(512, (3, 3), strides=(1, 1), padding="same",
+    #                                      activation='relu')(conv2d12)
+    #     mpool2 = tf.keras.layers.MaxPooling2D((2, 2))(conv2d13)
+
+    #     globav = tf.keras.layers.Flatten()(mpool2)
+
+    #     dense0 = tf.keras.layers.Dense(512, activation='relu', kernel_initializer=init)(globav)
+    #     dense1 = tf.keras.layers.Dense(256, activation='relu', kernel_initializer=init)(dense0)
+        
+    #     output = tf.keras.layers.Dense(3, activation=None)(dense1)
+
+    #     return output
 
     def run_lr_scheduler(self):
         """
@@ -300,17 +337,21 @@ class CustomModel:
     def predict(self, dataset):
         return self.model.predict(dataset)
 
-    def evaluate(self, on='test'):
-        """
-        Computes MOA histograms and averages over training, val or test set.
-        """
-        if on == 'training':
-            disorientation_angles, median_moa, ma_x, ma_y, ma_z = evaluate_and_disptlot(
-                self.model, TestingGenerator(self.xtr, self.ytr, self.bs), self.ytr, 'training')
-        elif on == 'test':
-            disorientation_angles, median_moa, ma_x, ma_y, ma_z = evaluate_and_disptlot(
-                self.model, self.testing_dataset, self.yte, 'test')
-        else:
-            disorientation_angles, median_moa, ma_x, ma_y, ma_z = evaluate_and_disptlot(
-                self.model, self.validation_dataset, self.yval, 'validation')
-        return disorientation_angles, median_moa, ma_x, ma_y, ma_z
+    # def evaluate(self, on='test'):
+    #     """
+    #     Computes MOA histograms and averages over training, val or test set.
+    #     """
+    #     if on == 'training':
+    #         dataset = TestingGenerator(self.xtr, self.ytr, self.bs)
+    #         preds = self.predict(dataset)
+    #         moas, median_moa, ma_x, ma_y, ma_z = evaluate(preds,  self.ytr)
+    #     elif on == 'test':
+    #         dataset = self.testing_dataset
+    #         preds = self.predict(dataset)
+    #         moas, median_moa, ma_x, ma_y, ma_z = evaluate(preds, self.yte)
+    #     else:
+    #         dataset = self.validation_dataset
+    #         preds = self.predict(dataset)
+    #         moas, median_moa, ma_x, ma_y, ma_z = evaluate(preds, self.yval)
+        
+    #     return moas, median_moa, ma_x, ma_y, ma_z

@@ -1,6 +1,9 @@
 
 *.pyc
-*.pyc
 *.xml
-lib/ml_helpers/__pycache__/evaluation.cpython-36.pyc
 *.npy
+*.h5
+*.bak
+*.ini
+trained_models/08-100ep/.data-00000-of-00001
+*.pyc

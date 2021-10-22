@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.colors as clrs
 import tensorflow as tf
@@ -7,6 +8,61 @@ from scipy.spatial import Voronoi, voronoi_plot_2d
 from sklearn.metrics import pairwise_distances
 from lib.utils import eulers_to_rot_mat
 from .metrics import misorientation
+
+
+class EvaluationManager:
+    def __init__(self):
+        self.df = pd.DataFrame(columns=['median', 'D_X', 'D_Y', 'D_Z'])
+        self.moas_tot = []
+        self.eulers_tot = []
+    
+    def evaluate(self, preds, eulers):
+        moas, median_moa, me_x, me_y, me_z = evaluate(preds, eulers)
+        self.df = self.df.append({
+            'median': median_moa,
+            'D_X': me_x,
+            'D_Y': me_y,
+            'D_Z': me_z,
+        }, ignore_index=True)
+        self.moas_tot.append(moas)
+        self.eulers_tot.append(eulers) 
+        
+    def display(self, title):
+        print(title)
+        print(self.df.describe().loc[['mean', 'std']])
+        
+    def plot_histogram(self, y_title=""):
+        self.moas_tot = np.array([item for sublist in self.moas_tot for item in sublist])
+        
+        # Disorientation histogram (on a grain level)
+        fig, ax = plt.subplots(figsize=(4, 3), dpi=200)
+        ax.hist(self.moas_tot, bins=20, color='#6dafd7', edgecolor='#222222', linewidth=2)
+        ax.set_xlim(0, 62)
+        ax.set_xlabel('Disorientation angle (deg)')
+        ax.set_ylabel(y_title)
+        plt.show()
+        
+    def plot_IPFs(self):
+        self.eulers_tot = np.array([item for sublist in self.eulers_tot for item in sublist])
+        self.eulers_tot = self.eulers_tot.reshape((len(self.eulers_tot), 3))
+        
+        # Error plotted in the IPF (X, Y, Z)
+        voronoi_IPF_plot(eulers=self.eulers_tot, z_values=self.moas_tot, direction='x')
+        voronoi_IPF_plot(eulers=self.eulers_tot, z_values=self.moas_tot, direction='y')
+        voronoi_IPF_plot(eulers=self.eulers_tot, z_values=self.moas_tot, direction='z')
+
+
+def evaluate(preds, eulers):
+    """
+    Custom model evaluation.
+    """    
+    moas = np.degrees(misorientation(eulers.astype(np.float32), preds).numpy())
+    median_moa = np.median(moas)
+    ma_x, ma_y, ma_z = in_and_out_of_plane(
+        preds.astype('float64'), 
+        eulers.astype('float64')
+    )
+    return moas, median_moa, ma_x, ma_y, ma_z    
 
 
 def visu_preds_and_targets(preds, minieulers, rx, ry):
@@ -22,7 +78,7 @@ def visu_preds_and_targets(preds, minieulers, rx, ry):
     y_map = y_map.numpy().reshape((rx, ry, 3))
     z_map = z_map.numpy().reshape((rx, ry, 3))
 
-    fig = plt.figure(figsize=(16, 8))
+    fig = plt.figure(figsize=(16, 8), dpi=200)
     ax = fig.add_subplot(231)
     ax.axis('off')
     ax.imshow(x_map_pred)
@@ -49,20 +105,59 @@ def visu_preds_and_targets(preds, minieulers, rx, ry):
     ax.set_title('Z (ground truth)')
     plt.tight_layout()
     plt.show()
+    
+    
+def visu_preds(preds, minieulers, rx, ry):
+    """Shows a 2 x 3 grid plot of IPFs in preds AND targets"""
+
+    x_map_pred, y_map_pred, z_map_pred = visualize(preds, rx, ry, reshape=False)
+    x_map_pred = x_map_pred.numpy().reshape((rx, ry, 3))
+    y_map_pred = y_map_pred.numpy().reshape((rx, ry, 3))
+    z_map_pred = z_map_pred.numpy().reshape((rx, ry, 3))
+
+    x_map, y_map, z_map = visualize(minieulers, rx, ry, reshape=False)
+    x_map = x_map.numpy().reshape((rx, ry, 3))
+    y_map = y_map.numpy().reshape((rx, ry, 3))
+    z_map = z_map.numpy().reshape((rx, ry, 3))
+
+    fig = plt.figure(figsize=(8, 8), dpi=200)
+    ax = fig.add_subplot(111)
+    ax.axis('off')
+    ax.imshow(x_map_pred)
+    plt.show()
+    
+    fig = plt.figure(figsize=(8, 8), dpi=200)
+    ax = fig.add_subplot(111)
+    ax.axis('off')
+    ax.imshow(y_map_pred)
+    plt.show()
+    
+    fig = plt.figure(figsize=(8, 8), dpi=200)
+    ax = fig.add_subplot(111)
+    ax.axis('off')
+    ax.imshow(z_map_pred)
+    plt.show()
+    
+    fig = plt.figure(figsize=(8, 8), dpi=200)
+    ax = fig.add_subplot(111)
+    ax.axis('off')
+    ax.imshow(x_map)
+    plt.show()
+    
+    fig = plt.figure(figsize=(8, 8), dpi=200)
+    ax = fig.add_subplot(111)
+    ax.axis('off')
+    ax.imshow(y_map)
+    plt.show()
+    
+    fig = plt.figure(figsize=(8, 8), dpi=200)
+    ax = fig.add_subplot(111)
+    ax.axis('off')
+    ax.imshow(z_map)
+    plt.show()
 
 
-def evaluate_and_disptlot(model, testing_dataset, yte, title='test'):
-    """Evaluates the testing dataset, calculates preds and moas, makes a distplot"""
-    model.evaluate(testing_dataset)  # isn't that the average moa though?
-    preds = model.predict(testing_dataset)
-    moas = np.degrees(misorientation(yte.astype(np.float32), preds).numpy())
-    median_moa = np.median(moas)
-    ma_x, ma_y, ma_z = in_and_out_of_plane(preds, yte)
-
-    return moas, median_moa, ma_x, ma_y, ma_z
-
-
-def voronoi_IPF_plot(eulers, z_values, direction='z'):
+def voronoi_IPF_plot(eulers, z_values, direction='z', vmax=20):
     """
     A plotting function to visualize distributions of data in the Inverse Pole Figure (IPF) space; we are looking at a sparse
     cloud of points in orientation space (for example 1 point per grain) each with an associated value of interest (for example,
@@ -157,7 +252,7 @@ def voronoi_IPF_plot(eulers, z_values, direction='z'):
 
     _, region_values = get_region_values(vor, xy_coords, z_values)
     mapper = plt.cm.ScalarMappable(
-        norm=clrs.Normalize(vmin=0, vmax=20, clip=True),
+        norm=clrs.Normalize(vmin=0, vmax=vmax, clip=True),
         cmap=plt.cm.Blues)
     for r in range(len(vor.point_region)):
         region = vor.regions[vor.point_region[r]]

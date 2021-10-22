@@ -1,9 +1,11 @@
 from .evaluation import (
     visu_preds_and_targets,
-    evaluate_and_disptlot,
+    visu_preds,
     visualize,
     voronoi_IPF_plot,
     in_and_out_of_plane,
+    evaluate,
+    EvaluationManager
     )
 
 from .losses import custom_loss
