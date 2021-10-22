@@ -29,13 +29,13 @@ We tested the code using the following dependencies:
 - tensorflow 2.1.0
 
 ##### Data
-Please download the **data** folder (3.4 GB) and **trained_models** folder (139 Mb) from the Menedley Dataset available at ~~DOI:10.17632/z8bh7n5b7d.1~~ [this preview](https://data.mendeley.com/datasets/z8bh7n5b7d/draft?a=df1ad0ba-6c55-477b-be3d-8e436b957846). Copy the two folders into the root directory of the repository.
+Please download the **data** folder (3.5 GB) and **trained_models** folder (139 Mb) from the Menedley Dataset available at ~~DOI:10.17632/z8bh7n5b7d.1~~ [this preview](https://data.mendeley.com/datasets/z8bh7n5b7d/draft?a=df1ad0ba-6c55-477b-be3d-8e436b957846). Copy the two folders into the root directory of the repository.
 
 ### Description
 
 The **data** folder contains (i) all training and evaluation sets used to derive the results presented in our publication and (ii) three additional files: 
-- **drm_data.npy** : A 4D numerical matrix (shape (x, y, theta, phi), type uint8) representing the experimental DRM dataset of the test specimen showcased in Figure 3 of the paper.
-- **eulers.npy** : The corresponding matrix of Euler angles measured by EBSD for this test specimen (shape (x, y, 3), type float32).
+- **/samples/08/drm_data.npy** : A 4D numerical matrix (shape (x, y, theta, phi), type uint8) representing the experimental DRM dataset of the test specimen showcased in Figure 3 of the paper.
+- **/samples/08/eulers.npy** : The corresponding matrix of Euler angles measured by EBSD for this test specimen (shape (x, y, 3), type float32).
 - **anomaly_specimen.npy** : The DRM dataset of the specimen shown in Figure 6 of the paper to demonstrate the detection of out-of-distribution data.
 
 The **lib** folder contains the Python code to process the data and implement and test our machine learning models to reproduce our results.
