@@ -1,4 +1,4 @@
-# EulerNet: A Machine Learning Approach to Map Crystal Orientation by Optical Microscopy
+# A Machine Learning Approach to Map Crystal Orientation by Optical Microscopy
 
 This repository contains the Python code necessary to reproduce the results presented in our publication.
 
