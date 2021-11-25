@@ -29,7 +29,7 @@ We tested the code using the following dependencies:
 - tensorflow 2.1.0
 
 ##### Data
-Please download the **data** folder (3.5 GB) and **trained_models** folder (139 Mb) from the Menedley Dataset available at DOI:10.17632/z8bh7n5b7d.1. Copy the two folders into the root directory of the repository.
+Please download the **data** folder (3.5 GB) and **trained_models** folder (139 Mb) from the Menedley Dataset available at [DOI:10.17632/z8bh7n5b7d.1](https://data.mendeley.com/datasets/z8bh7n5b7d/1). Copy the two folders into the root directory of the repository.
 
 ### Description
 
